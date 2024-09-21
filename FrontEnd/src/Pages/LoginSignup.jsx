@@ -18,7 +18,7 @@ const LoginSignup = () => {
   const login = async ()=>{
       console.log("login fn executed",formData);
       let responseData;
-     await fetch('http://localhost:4000/login',{
+     await fetch('https://shopperbe.onrender.com/login',{
       method:'POST',
       headers:{
         Accept:'application/json',
@@ -38,7 +38,7 @@ const LoginSignup = () => {
   const signup = async ()=>{
      console.log("signup fn executed",formData);
      let responseData;
-     await fetch('http://localhost:4000/signup',{
+     await fetch('https://shopperbe.onrender.com/signup',{
       method:'POST',
       headers:{
         Accept:'application/json',
