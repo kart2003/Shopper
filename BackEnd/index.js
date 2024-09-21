@@ -20,7 +20,7 @@ app.get('/',(req,res) =>{
     res.send("Express App is Running")
 })
 
-//Image Storage Engine
+// //Image Storage Engine
 
 const storage = multer.diskStorage({
     destination:'./upload/images',
@@ -87,10 +87,10 @@ app.post('/addproduct',async (req,res) =>{
         let last_product = last_product_array[0];
         id = last_product.id+1;
     }else{
-        id:1;
+        id=1;
     }
     const product = new Product({
-        id : id,
+        id : id, 
         name : req.body.name,
         image : req.body.image,
         category : req.body.category,
@@ -178,7 +178,8 @@ app.post('/signup',async (req,res)=>{
     res.json({success:true,token})
 })
 
-//creating endpoint for user login
+//creating endpoint for user login   
+
 app.post('/login',async(req,res)=>{
     let user = await Users.findOne({email:req.body.email});
     if(user){
@@ -195,7 +196,7 @@ app.post('/login',async(req,res)=>{
             res.json({success:false,errors:"Wrong Password"})
         }
     }else{
-        res.json({success:false,errors:"Wrong Email Id"})
+        res.json({success:false,errors:"Wrong Email Id Or Account doesn't exist."})
     }
 })
 
@@ -207,7 +208,7 @@ app.get('/newcollections',async (req,res)=>{
     res.send(newcollection);   
 }) 
 
-//creating endpont for popular in women section
+//creating endpoint for popular in women section
 app.get('/popularinwomen',async (req,res)=>{
     let products = await Product.find({category:"women"});
     let popular_in_women = products.slice(0,4);
@@ -233,7 +234,7 @@ const fetchUser = async (req,res,next)=>{
 
 //creating endpoint for adding products in cartdata
 app.post('/addtocart',fetchUser,async (req,res)=>{ 
-    console.log("added",req.body.itemId);
+   // console.log("added",req.body.itemId);
     let userData = await Users.findOne({_id:req.user.id})
     userData.cartData[req.body.itemId] +=1;
     await Users.findOneAndUpdate({_id:req.user.id},{cartData:userData.cartData})
@@ -242,7 +243,7 @@ app.post('/addtocart',fetchUser,async (req,res)=>{
 
 //creating endpoint to remove product from cartdata
 app.post('/removefromcart',fetchUser,async (req,res)=>{
-    console.log("removed",req.body.itemId);
+   // console.log("removed",req.body.itemId);
      let userData = await Users.findOne({_id:req.user.id})
      if(userData.cartData[req.body.itemId] > 0)
        userData.cartData[req.body.itemId] -=1;

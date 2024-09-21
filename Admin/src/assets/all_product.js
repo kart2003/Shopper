@@ -16,7 +16,7 @@ import p15_img from "./product_15.png";
 import p16_img from "./product_16.png";
 import p17_img from "./product_17.png";
 import p18_img from "./product_18.png";
-import p19_img from "./product_19.png";
+import p19_img from "./product_19.png"; 
 import p20_img from "./product_20.png";
 import p21_img from "./product_21.png";
 import p22_img from "./product_22.png";

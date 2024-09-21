@@ -21,7 +21,7 @@ const AddProduct = () => {
    }
 
    const Add_Product =  async ()=>{
-     console.log(productDetails);
+     console.log(productDetails);  
      let responseData;
      let product = productDetails;
 
@@ -71,6 +71,7 @@ const AddProduct = () => {
        <div className="add-product-itemfield">
         <p>Product Category</p>
         <select value={productDetails.category} onChange={changeHandler} name="category" className='add-product-selector'>
+            <option value="select">Select</option>
             <option value="women">Women</option>
             <option value="men">Men</option>
             <option value="kid">Kid</option>

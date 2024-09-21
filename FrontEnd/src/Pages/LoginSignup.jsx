@@ -54,7 +54,7 @@ const LoginSignup = () => {
       alert(responseData.errors)
      }
   }
-
+  
   return (
     <div className='loginsignup'>
       <div className="loginsignup-container">
