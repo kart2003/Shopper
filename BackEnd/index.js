@@ -10,7 +10,11 @@ const cors = require('cors');
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use(cors())
+app.use(cors({
+  origin: 'https://shopperfe.onrender.com/', // Allow your frontend origin
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true, // If you are using cookies/authentication
+}));
 
 //db connection mongodb
 mongoose.connect('mongodb+srv://kartikey:Kart%402003@cluster0.0wupe.mongodb.net/Ecommerce')
