@@ -10,19 +10,10 @@ const cors = require('cors');
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use(cors({
-  origin: '*', // Allow your frontend origin
-  methods: 'GET,POST,PUT,DELETE',
-  credentials: false, // If you are using cookies/authentication
-}));
+app.use(cors());
 
 //db connection mongodb
 mongoose.connect('mongodb+srv://kartikey:Kart%402003@cluster0.0wupe.mongodb.net/Ecommerce')
-
-app.use((req, res, next) => {
-  res.removeHeader('Permissions-Policy');
-  next();
-});
 
 //API creation
 app.get('/',(req,res) =>{
