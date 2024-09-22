@@ -15,6 +15,11 @@ app.use(cors())
 //db connection mongodb
 mongoose.connect('mongodb+srv://kartikey:Kart%402003@cluster0.0wupe.mongodb.net/Ecommerce')
 
+app.use((req, res, next) => {
+  res.removeHeader('Permissions-Policy');
+  next();
+});
+
 //API creation
 app.get('/',(req,res) =>{
     res.send("Express App is Running")
