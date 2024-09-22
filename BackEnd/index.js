@@ -11,9 +11,9 @@ const cors = require('cors');
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors({
-  origin: 'https://shopperfe.onrender.com/', // Allow your frontend origin
+  origin: '*', // Allow your frontend origin
   methods: 'GET,POST,PUT,DELETE',
-  credentials: true, // If you are using cookies/authentication
+  credentials: false, // If you are using cookies/authentication
 }));
 
 //db connection mongodb
