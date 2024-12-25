@@ -7,47 +7,74 @@ const jwt = require('jsonwebtoken')
 const multer = require('multer')
 const path = require('path')
 const cors = require('cors');
+const { GridFsStorage } = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
 
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.use(cors({
-  'allowedHeaders': ['sessionId', 'Content-Type'],
-  'exposedHeaders': ['sessionId'],
-  'origin': '*',
-  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  'preflightContinue': false
-}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    allowedHeaders: ['sessionId', 'Content-Type'],
+    exposedHeaders: ['sessionId'],
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+  })
+);
 
-//db connection mongodb
-mongoose.connect('mongodb+srv://kartikey:Kart%402003@cluster0.0wupe.mongodb.net/Ecommerce')
+const mongoURI = 'mongodb+srv://kartikey:Kart%402003@cluster0.0wupe.mongodb.net/Ecommerce';
+const conn = mongoose.createConnection(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-//API creation
-app.get('/',(req,res) =>{
-    res.send("Express App is Running")
-})
+let gfs;
+conn.once('open', () => {
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection('uploads');
+});
 
-// //Image Storage Engine
-
-const storage = multer.diskStorage({
-    destination:'./upload/images',
-    filename:(req,file,cb)=>{
-       return cb(null,`${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`) 
-    }
-})
+// Configure GridFS Storage
+const storage = new GridFsStorage({
+  url: mongoURI,
+  options: { useUnifiedTopology: true },
+  file: (req, file) => {
+    return {
+      filename: `${Date.now()}_${file.originalname}`,
+      bucketName: 'uploads', // Bucket name in GridFS
+    };
+  },
+});
 
 const upload = multer({storage:storage})
 
 //Creating Upload Endpoint for images
 
-app.use('/images',express.static('upload/images'))
+app.get('/', (req, res) => {
+  res.send('Express App is Running');
+});
 
-app.post('/upload',upload.single('product'),(req,res)=>{
-      res.json({
-        success:1,
-        image_url:`https://shopperbe.onrender.com/images/${req.file.filename}`  
-      })
-})
+// Upload Endpoint
+app.post('/upload', upload.single('product'), (req, res) => {
+  res.json({
+    success: 1,
+    image_url: `https://shopperbe.onrender.com/image/${req.file.filename}`,
+  });
+});
 
+
+app.get('/image/:filename', async (req, res) => {
+  try {
+    const file = await gfs.files.findOne({ filename: req.params.filename });
+    if (!file || !file.contentType.startsWith('image')) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+    const readStream = gfs.createReadStream(file.filename);
+    readStream.pipe(res);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 //Schema for Creating Products
 
 const Product = mongoose.model("Product",{
