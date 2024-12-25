@@ -10,7 +10,13 @@ const cors = require('cors');
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use(cors());
+app.use(cors({
+  'allowedHeaders': ['sessionId', 'Content-Type'],
+  'exposedHeaders': ['sessionId'],
+  'origin': '*',
+  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  'preflightContinue': false
+}));
 
 //db connection mongodb
 mongoose.connect('mongodb+srv://kartikey:Kart%402003@cluster0.0wupe.mongodb.net/Ecommerce')
