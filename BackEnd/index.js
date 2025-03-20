@@ -65,10 +65,15 @@ app.post('/upload', upload.single('product'), (req, res) => {
 
 app.get('/image/:filename', async (req, res) => {
   try {
+    if (!gfs) {
+      return res.status(500).json({ error: 'GridFS is not initialized yet' });
+    }
     const file = await gfs.files.findOne({ filename: req.params.filename });
+
     if (!file || !file.contentType.startsWith('image')) {
       return res.status(404).json({ error: 'File not found' });
     }
+
     const readStream = gfs.createReadStream(file.filename);
     readStream.pipe(res);
   } catch (err) {
