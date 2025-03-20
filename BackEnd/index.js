@@ -14,11 +14,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    allowedHeaders: ['sessionId', 'Content-Type'],
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: '*', // Change '*' to your frontend domain if needed, e.g., "https://yourfrontend.com"
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
   })
 );
+
 
 const mongoURI = 'mongodb+srv://kartikey:Kart%402003@cluster0.0wupe.mongodb.net/Ecommerce';
 const conn = mongoose.createConnection(mongoURI, {
